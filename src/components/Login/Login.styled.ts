@@ -1,32 +1,114 @@
 import styled from 'styled-components'
 
+export const AuthForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
+  margin: 32px auto;
+  font-family: var(--font-family);
+
+  button:focus-visible {
+    outline: 2px solid var(--text-color);
+    outline-offset: 3px;
+  }
+`;
+
+export const FormField = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const FormInput = styled.input`
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #b0c4de;
+  border-radius: 8px;
+  background: var(--page-bg);
+  color: var(--text-color);
+  font: inherit;
+
+  &:focus-visible {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+  }
+`;
+
+export const SubmitButton = styled.button`
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--electricity);
+  color: #fff;
+  font: inherit;
+`;
+
+export const ModeButton = styled.button`
+  color: var(--text-color);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+`;
+
 export const LoginHeader = styled.header`
   display: flex;
   justify-content: flex-end;
   gap:10px;
-  
+  margin-top: 10px;
   
   `
 
   export const LanguageSwitcher = styled.ul`
   display: flex;
+   border: 0.5px solid #B0C4DE;
+  border-radius: 8px;
+  overflow: hidden;
   `
 
   export const LanguageOption = styled.li`
   width: 30px;
-  height: 30px;
-  border: none;
+  height: 30px; 
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
+  `
 
+  export const LanguageButton = styled.button`
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border-radius: 0;
 
-  &:not(:first-child) {
-    border-left: 1px solid #000;
+  ${LanguageOption}:first-child & {
+    border-radius: 8px 0 0 8px;
   }
+
+  ${LanguageOption}:last-child & {
+    border-radius: 0 8px 8px 0;
+  }
+
+   &[aria-pressed='true'] {
+    background-color: #316d11;
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+  
   `
 
   export const SwichTheme = styled.button`
   width: 30px;
   height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.5px solid #B0C4DE;
+  border-radius: 30%;
+  background-color: transparent;
+  color: var(--text-color);
   `
