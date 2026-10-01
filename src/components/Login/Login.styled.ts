@@ -1,17 +1,60 @@
 import styled from 'styled-components'
 
+export const AuthContent = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  min-height: calc(100dvh - 40px);
+  width: 100%;
+  padding: 32px 0;
+`;
+
 export const AuthForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
   max-width: 400px;
-  margin: 32px auto;
+  margin: 0;
   font-family: var(--font-family);
+  text-align: center;
 
   button:focus-visible {
     outline: 2px solid var(--text-color);
     outline-offset: 3px;
+  }
+`;
+
+export const AppName = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+`;
+
+export const AppIcon = styled.div`
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 30%;
+  background: #000;
+  color: #fff;
+
+  svg {
+    width: 40px;
+    height: 40px;
+    fill: currentColor;
+  }
+
+  :root[data-theme='dark'] & {
+    background: #fff;
+    color: #000;
   }
 `;
 
