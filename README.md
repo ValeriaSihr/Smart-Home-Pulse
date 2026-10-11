@@ -1,5 +1,19 @@
 # React + TypeScript + Vite
 
+## Firebase configuration
+
+Copy `.env.example` to `.env.local` and fill in the Firebase Web app configuration
+from Firebase Console. `.env.local` is ignored by Git. Restart Vite after changes.
+
+Before deploying, add the same `VITE_FIREBASE_*` variables to the hosting project's
+environment settings for Production and Preview, then rebuild/redeploy.
+
+Vite embeds `VITE_*` variables in the browser bundle. They are not secrets.
+Never put service-account private keys or server credentials in these variables.
+Firebase data access must be protected by Security Rules; apply appropriate API
+restrictions to the Firebase Web key. Moving values to env files does not remove
+values from existing Git history.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
