@@ -80,6 +80,46 @@ export const FormInput = styled.input`
   }
 `;
 
+export const PasswordField = styled.div`
+  position: relative;
+
+  input {
+    padding-right: 52px;
+  }
+
+  input::-ms-reveal {
+    display: none;
+  }
+`;
+
+export const PasswordToggle = styled.button`
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border-radius: 6px;
+  color: var(--text-color);
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  svg path {
+    fill: currentColor;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+`;
+
 export const SubmitButton = styled.button`
   padding: 12px 16px;
   border-radius: 8px;
