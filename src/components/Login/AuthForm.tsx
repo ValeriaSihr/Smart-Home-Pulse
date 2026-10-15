@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import * as SC from './Login.styled.ts';
 import Home from '../../icons/home-svgrepo-com.svg?react'
 import EyeShow from '../../icons/eye-show-svgrepo-com.svg?react';
@@ -11,6 +12,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "fire
 
 
 export const AuthForm = () => {
+  const { t } = useTranslation();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [password, setPassword] = useState('');
@@ -21,6 +23,7 @@ export const AuthForm = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [message, setMessage] = useState('');
+    const [errorCode, setErrorCode] = useState('');
     const isRegister = mode === 'register';
 
     return <SC.AuthContent>
@@ -31,8 +34,8 @@ export const AuthForm = () => {
                <SC.AppIcon>
                  <Home width="40" height="40" aria-hidden="true" />
                </SC.AppIcon>
-               <h1>Smart Home Pulse</h1>
-                <p>Utility management system</p>
+               <h1>{t('appName')}</h1>
+                <p>{t('subtitle')}</p>
             </SC.AppName>
             <SC.AuthForm
                 aria-labelledby="auth-title"
@@ -45,7 +48,7 @@ export const AuthForm = () => {
                     event.preventDefault();
                     if (isSubmitting) return;
                     if (isRegister && password !== confirmPassword) {
-                        setPasswordError('Passwords do not match.');
+                        setPasswordError('passwordMismatch');
                         event.currentTarget.querySelector<HTMLInputElement>('#confirm-password')?.focus();
                         return;
                     }
@@ -60,40 +63,41 @@ export const AuthForm = () => {
                         // App observes the Firebase session and redirects after authentication.
                     } catch (error) {
                         const messages: Record<string, string> = {
-                            'auth/invalid-credential': 'Incorrect email or password.',
-                            'auth/user-not-found': 'Incorrect email or password.',
-                            'auth/wrong-password': 'Incorrect email or password.',
-                            'auth/invalid-email': 'Enter a valid email address.',
-                            'auth/email-already-in-use': 'This email is already registered. Please sign in.',
-                            'auth/weak-password': 'Choose a stronger password.',
-                            'auth/password-does-not-meet-requirements': 'Your password does not meet the account password requirements.',
-                            'auth/too-many-requests': 'Too many attempts. Please try again later.',
-                            'auth/network-request-failed': 'Check your internet connection and try again.',
-                            'auth/user-disabled': 'This account has been disabled.',
-                            'auth/operation-not-allowed': 'Email/password sign-in is not enabled for this project.',
-                            'auth/configuration-not-found': 'Firebase Authentication is not configured. Enable Email/Password in Firebase Console.',
-                            'auth/invalid-api-key': 'The Firebase API key is invalid. Check the web app configuration.',
-                            'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'The Firebase API key is invalid. Check the web app configuration.',
-                            'auth/app-not-authorized': 'This app is not authorized to use Firebase Authentication. Check the API key restrictions.',
-                            'auth/unauthorized-domain': 'This website domain is not authorized in Firebase Authentication settings.',
+                            'auth/invalid-credential': 'invalidCredentials',
+                            'auth/user-not-found': 'invalidCredentials',
+                            'auth/wrong-password': 'invalidCredentials',
+                            'auth/invalid-email': 'invalidEmail',
+                            'auth/email-already-in-use': 'emailInUse',
+                            'auth/weak-password': 'weakPassword',
+                            'auth/password-does-not-meet-requirements': 'passwordRequirements',
+                            'auth/too-many-requests': 'tooManyRequests',
+                            'auth/network-request-failed': 'networkError',
+                            'auth/user-disabled': 'disabledAccount',
+                            'auth/operation-not-allowed': 'providerDisabled',
+                            'auth/configuration-not-found': 'configurationError',
+                            'auth/invalid-api-key': 'invalidApiKey',
+                            'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'invalidApiKey',
+                            'auth/app-not-authorized': 'appUnauthorized',
+                            'auth/unauthorized-domain': 'domainUnauthorized',
                         };
+                        setErrorCode(error instanceof FirebaseError ? error.code : '');
                         setMessage(error instanceof FirebaseError
-                            ? messages[error.code] ?? `Unable to ${isRegister ? 'create an account' : 'sign in'} (${error.code}). Please try again.`
-                            : 'Something went wrong. Please try again.');
+                            ? messages[error.code] ?? 'authFailure'
+                            : 'unknownError');
                     } finally {
                         setIsSubmitting(false);
                     }
                 }}
             >
-                <h2 id="auth-title">{isRegister ? 'Create an account' : 'Sign in'}</h2>
+                <h2 id="auth-title">{isRegister ? t('register') : t('signIn')}</h2>
                 <SC.FormField>
-                    <label htmlFor="email">Email address</label>
+                    <label htmlFor="email">{t('email')}</label>
                     <SC.FormInput id="email" name="email" type="email"
                         autoComplete="email" required value={email} disabled={isSubmitting}
                         onChange={event => setEmail(event.target.value)} />
                 </SC.FormField>
                 <SC.FormField>
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{t('password')}</label>
                     <SC.PasswordField>
                     <SC.FormInput id="password" name="password" type={showPassword ? 'text' : 'password'}
                         autoComplete={isRegister ? 'new-password' : 'current-password'}
@@ -101,17 +105,17 @@ export const AuthForm = () => {
                         aria-describedby={isRegister ? 'password-hint' : undefined}
                         value={password} onChange={event => setPassword(event.target.value)} />
                     <SC.PasswordToggle type="button" disabled={isSubmitting}
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        aria-label={showPassword ? t('hidePassword') : t('showPassword')}
                         aria-controls="password"
                         onClick={() => setShowPassword(visible => !visible)}>
                         {showPassword ? <EyeOff aria-hidden="true" focusable="false" /> : <EyeShow aria-hidden="true" focusable="false" />}
                     </SC.PasswordToggle>
                     </SC.PasswordField>
-                    {isRegister && <small id="password-hint">Use at least 8 characters.</small>}
+                    {isRegister && <small id="password-hint">{t('passwordHint')}</small>}
                 </SC.FormField>
                 {isRegister && (
                     <SC.FormField>
-                        <label htmlFor="confirm-password">Confirm password</label>
+                        <label htmlFor="confirm-password">{t('confirmPassword')}</label>
                         <SC.PasswordField>
                         <SC.FormInput id="confirm-password" name="confirmPassword" type={showConfirmPassword ? 'text' : 'password'}
                             autoComplete="new-password" required value={confirmPassword} disabled={isSubmitting}
@@ -119,19 +123,19 @@ export const AuthForm = () => {
                             aria-describedby={passwordError ? 'password-error' : undefined}
                             onChange={event => setConfirmPassword(event.target.value)} />
                         <SC.PasswordToggle type="button" disabled={isSubmitting}
-                            aria-label={showConfirmPassword ? 'Hide confirmation password' : 'Show confirmation password'}
+                            aria-label={showConfirmPassword ? t('hideConfirmation') : t('showConfirmation')}
                             aria-controls="confirm-password"
                             onClick={() => setShowConfirmPassword(visible => !visible)}>
                             {showConfirmPassword ? <EyeOff aria-hidden="true" focusable="false" /> : <EyeShow aria-hidden="true" focusable="false" />}
                         </SC.PasswordToggle>
                         </SC.PasswordField>
-                        {passwordError && <p id="password-error" role="alert">{passwordError}</p>}
+                        {passwordError && <p id="password-error" role="alert">{t(passwordError)}</p>}
                     </SC.FormField>
                 )}
                 <SC.SubmitButton type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Please wait…' : isRegister ? 'Create account' : 'Sign in'}
+                    {isSubmitting ? t('wait') : isRegister ? t('createAccount') : t('signIn')}
                 </SC.SubmitButton>
-                <p role="status">{message}</p>
+                <p role="status">{message && t(message, { code: errorCode })}</p>
                 <SC.ModeButton type="button" disabled={isSubmitting} onClick={() => {
                     setMode(isRegister ? 'login' : 'register');
                     setPassword('');
@@ -141,7 +145,7 @@ export const AuthForm = () => {
                     setPasswordError('');
                     setMessage('');
                 }}>
-                    {isRegister ? 'Already have an account? Sign in' : 'No account yet? Register'}
+                    {isRegister ? t('haveAccount') : t('noAccount')}
                 </SC.ModeButton>
             </SC.AuthForm>
     </SC.AuthContent>

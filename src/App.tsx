@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Login } from './components/Login/Login'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { Dashboard } from './components/Dashboard/Dashboard'
@@ -7,6 +8,7 @@ import { onAuthStateChanged, type User } from 'firebase/auth'
 import { auth } from './components/Api/Api'
 
 function App() {
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [authError, setAuthError] = useState(false)
@@ -19,8 +21,8 @@ function App() {
     setLoading(false)
   }), [])
 
-  if (loading) return <p role="status">Loading your session…</p>
-  if (authError) return <p role="alert">Unable to load your session. Please reload the page.</p>
+  if (loading) return <p role="status">{t('loadingSession')}</p>
+  if (authError) return <p role="alert">{t('sessionError')}</p>
 
   return (
     <BrowserRouter>
