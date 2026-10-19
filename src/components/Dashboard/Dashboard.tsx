@@ -1,4 +1,4 @@
-import { LoginHeader } from '../Login/LoginHeader';
+import { DashHeader } from './DashHeader';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { signOut } from 'firebase/auth';
@@ -22,8 +22,7 @@ export const Dashboard = () => {
         }
     };
     return <>
-    <LoginHeader />
-    <p>{t('dashboard')}</p>
+    <DashHeader titleKey="dashboard" />
     <p>{t('signedInAs', { email: auth.currentUser?.email })}</p>
     <button type="button" disabled={isSigningOut} onClick={handleSignOut}>
         {isSigningOut ? t('signingOut') : t('signOut')}

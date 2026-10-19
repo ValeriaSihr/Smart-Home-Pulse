@@ -173,7 +173,7 @@ export const LoginHeader = styled.header`
   }
 
    &[aria-pressed='true'] {
-    background-color: #316d11;
+    background-color: var(--electricity);
     color: #fff;
   }
 
