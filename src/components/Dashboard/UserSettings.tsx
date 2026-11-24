@@ -1,13 +1,15 @@
-﻿import { useState, type FormEvent } from 'react';
+import { useState, type SubmitEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as S from './Profile.styled';
 import type { Profile } from './profile';
+
+
 export function UserSettings({ profile, onSave }: { profile: Profile; onSave: (next: Profile) => boolean }) {
   const { t } = useTranslation();
   const [draft, setDraft] = useState(profile);
   const [status, setStatus] = useState('');
   const change = (next: Profile) => { setDraft(next); setStatus(''); };
-  const submit = (e: FormEvent) => {
+  const submit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const next = { ...draft, firstName: draft.firstName.trim(), lastName: draft.lastName.trim(), address: draft.address.trim(), cards: draft.cards.map(c => ({ ...c, label: c.label.trim() })), family: draft.family.map(f => ({ ...f, name: f.name.trim() })) };
     if (!next.firstName || next.cards.some(c => !c.label || !/^\d{4}$/.test(c.last4)) || next.family.some(f => !f.name)) { setStatus('profileValidation'); return; }
